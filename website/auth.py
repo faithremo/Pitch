@@ -2,7 +2,7 @@ from tkinter import Y
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from . import db
 from .models import User
-from flask_login import login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -64,6 +64,7 @@ def sign_up():
             new_user = User(email=email, username=username, password=generate_password_hash(password1, method='sah256'))
             db.session.add(new_user)
             db.session.commit()
+            login_user(new_user, remember=True)
             flash('User created!')
             return redirect(url_for('views.home'))
         
@@ -74,6 +75,8 @@ def sign_up():
 
 
 @auth.route("/logout")
+@login_required
 def logout():
+    logout_user()
     return redirect(url_for("views.home"))
 

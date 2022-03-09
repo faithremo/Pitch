@@ -10,3 +10,7 @@ def home():
     return render_template("home.html", user=current_user.username)
 
 
+@views.route("/create-post", method=['GET' 'POST'])
+@login_required
+def create_pitch():
+    return render_template('create_pitch.html', user=current_user)

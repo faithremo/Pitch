@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
@@ -20,7 +19,7 @@ def create_app():
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
 
-    from .models import User
+    from .models import User, Pitch
 
     create_database(app)
 
@@ -33,6 +32,7 @@ def create_app():
         return User.query.get(int(id))
 
     return app
+
 
 def create_database(app):
     if not path.exists("website/" + DB_NAME):

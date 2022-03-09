@@ -1,26 +1,34 @@
+
 from unicodedata import category
-from flask import Blueprint, render_template, flash
+from flask import Blueprint, render_template,request,flash,redirect,url_for
 from flask_login import login_required, current_user
+from .models import Pitch
+from . import db
 
 views = Blueprint("views", __name__)
+
 
 @views.route("/")
 @views.route("/home")
 @login_required
 def home():
-    return render_template("home.html", user=current_user.username)
+    pitches=Pitch.query.all()
+    return render_template("home.html", user=current_user,pitches=pitches)
 
-
-@views.route("/create-post", method=['GET' 'POST'])
+@views.route("/create-pitch", methods=['GET', 'POST'])
 @login_required
 def create_pitch():
-    if request.method == "POST":
+    if request.method =="POST":
         text = request.form.get('text')
         
         if not text:
-            flash('Pitch cannot be empty', category='error')
-            
+            flash('This cannot be empty',category='error')
         else:
-            flash('pitch created!', category='success')   
+            pitch=Pitch(text=text,author=current_user.id)
+            db.session.add(pitch)
+            db.session.commit()
+            flash('Pitch Created!!',category='success')
+        return redirect(url_for('views.home'))
     
-    return render_template('create_pitch.html', user=current_user)
+    return render_template('create-pitches.html', user=current_user)
+

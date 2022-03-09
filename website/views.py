@@ -30,5 +30,23 @@ def create_pitch():
             flash('Pitch Created!!',category='success')
         return redirect(url_for('views.home'))
     
+    
     return render_template('create-pitches.html', user=current_user)
+
+
+@views.route("/delete-pitch/<id>")
+@login_required
+def delete_pitch(id):
+    pitch = Pitch.query.filter_by(id=id).first()
+    
+    if not pitch:
+        flash("Pitch does not exist.", category='error')
+        return redirect(url_for('views.home'))
+    elif current_user.id !=pitch.id:
+        flash('You do not have permission to delete this pitch.')
+    else:
+        db.session.commit()
+        flash('Pitch delete', category='success')
+        
+    return redirect(url_for('views.home'))
 

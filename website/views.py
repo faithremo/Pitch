@@ -2,7 +2,7 @@
 from unicodedata import category
 from flask import Blueprint, render_template,request,flash,redirect,url_for
 from flask_login import login_required, current_user
-from .models import Pitch
+from .models import Pitch, User
 from . import db
 
 views = Blueprint("views", __name__)
@@ -41,12 +41,24 @@ def delete_pitch(id):
     
     if not pitch:
         flash("Pitch does not exist.", category='error')
-        return redirect(url_for('views.home'))
+        
     elif current_user.id !=pitch.id:
-        flash('You do not have permission to delete this pitch.')
+        flash('You do not have permission to delete this pitch.', category= 'error')
     else:
+        db.session.delete(pitch)
         db.session.commit()
-        flash('Pitch delete', category='success')
+        flash('Pitch deleted', category='success')
         
     return redirect(url_for('views.home'))
+
+@views.route("/pitches/<username>")
+@login_required
+def pitches(username):
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash('The user does not exist.', category='error')
+        return redirect(url_for('views.home'))
+    
+    Pitch = Pitch.query.filter_by(username=username).all()
+    return render_template("pitches.html", user=current_user, pitches=pitches, username=username)
 

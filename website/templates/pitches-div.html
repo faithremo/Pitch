@@ -30,7 +30,7 @@
                     <a href="/pitches/{{comment.user.username}}">{{comment.user.username}}</a>:{{comment.text}}
                     
                     <div>
-                        <small class="text-muted"> {{comment.date}}</small>
+                        <small class="text-muted"> {{comment.date_created}}</small>
                     </div>
                 </div>
                 
@@ -38,6 +38,15 @@
             </div>
         </div>
     </div>
+    <p class="card-text">
+    {% if pitch.comments|length > 0 %}
+    <a data-bs-toggle="collapse" href="#comments-{{pitch.id}} role=button">
+        <small>View {{pitch.comments|length}} Comments</small>
+    </a>
+    {% else %}
+    <small class="text-muted">No Comments</small>
+    {% endif %}
+    </p> 
     <form
         class="input-group mb-3"
         method="POST"
@@ -47,7 +56,7 @@
           type="text"
           id="text"
           name="text"
-          class="form-control"
+          class="form-control"|length
           placeholder="Comment something!"
         />
         <button type="submit" class="btn btn-primary">Comment</button>

@@ -1,4 +1,3 @@
-{%extends "base.html"%} {%block title%}{{username}}'s Pitches{%endblock%} 
-{%block content%}
-<h1 align="center">{{username}}'s Pitches</h1>
-{%endblock%}
+{%extends "pitches_div.html"%} {%block title%}{{username}}'s Pitches{%endblock%} 
+{% block header %} {{username}}'s pitches {%endblock%} {% block footer %} 
+{% endblock %}

@@ -59,6 +59,6 @@ def pitches(username):
         flash('The user does not exist.', category='error')
         return redirect(url_for('views.home'))
     
-    Pitch = Pitch.query.filter_by(username=username).all()
+    pitches = Pitch.query.filter_by(author=user.id).all()
     return render_template("pitches.html", user=current_user, pitches=pitches, username=username)
 

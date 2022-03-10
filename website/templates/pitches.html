@@ -1,3 +1,8 @@
-{%extends "pitches_div.html"%} {%block title%}{{username}}'s Pitches{%endblock%} 
-{% block header %} {{username}}'s pitches {%endblock%} {% block footer %} 
+{%extends "pitches-div.html"%} {%block title%}{{username}}'s Pitches{%endblock%} 
+{% block header %} {{username}}'s pitches {%endblock%} {% block footer %}
+<div align="center">
+    <a href="/home"
+        <button type="button" class="btn btn-primary btn-lg">Back</button>
+    </a>
+</div> 
 {% endblock %}

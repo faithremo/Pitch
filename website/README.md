@@ -8,7 +8,7 @@ Faith Nduta
 8/3/2022
 
 ## Desctiption
-This is a python application that allows a user to log and sign in to a Pitch app.I t also allow a user to add,comment,delete, like and dislike a pitch. The app shows the date at time a pitch was added.
+This is a python-flask application that allows a user to log and sign in to a Pitch app.It also allow a user to add,comment,delete, like and dislike a pitch. The app shows the date at time a pitch was added.
 
 ## Installation
 In order to run the application, the following installations are required: python3.8 

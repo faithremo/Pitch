@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Pitch, User, Comment
+from .models import Pitch, User, Comment, Like
 from . import db
 
 views = Blueprint("views", __name__)
@@ -31,7 +31,7 @@ def create_pitch():
             flash('Pitch created!', category='success')
             return redirect(url_for('views.home'))
 
-    return render_template('create_pitch.html', user=current_user)
+    return render_template('create-pitches.html', user=current_user)
 
 
 @views.route("/delete-pitch/<id>")
@@ -75,7 +75,7 @@ def create_comment(pitch_id):
         pitch = Pitch.query.filter_by(id=pitch_id)
         if pitch:
             comment = Comment(
-                text=text, author=current_user.id, post_id=pitch_id)
+                text=text, author=current_user.id, pitch_id=pitch_id)
             db.session.add(comment)
             db.session.commit()
         else:
@@ -99,3 +99,20 @@ def delete_comment(comment_id):
 
     return redirect(url_for('views.home'))
 
+@views.route("/like-pitch/<pitch_id>", methods=['GET'])
+@login_required
+def like(pitch_id):
+    pitch = Pitch.query.filter_by(id=pitch_id).first()
+    like = Like.query.filter_by(author=current_user.id, pitch_id=pitch_id).first()
+    
+    if not pitch:
+        flash('The pitch does not exist.', category='error')
+    elif like:
+        db.session.delete(like)
+        db.session.commit()
+    else:
+        like = Like(author=current_user.id, pitch_id=pitch.id)
+        db.session.add(like)
+        db.session.commit()
+    
+    return redirect(url_for('views.home'))

@@ -10,8 +10,22 @@
           
           <div>
             {{ pitch.likes|length }}
-            <a href="/like-pitch/{{pitch.id}}"><i class="far fa-thumbs-up"></i></a>
+            {% set liked = false %}
+            {% for like in pitch.likes %}
+              {% if like.author == user.id %}
+                {% set liked = true %}
+              {% endif %}
+            {% endfor %}
+
+            {% if liked %}
+            {% set icon_class = "fas fa-thumbs-up" %}
+            {% else %}
+            {% set icon_class = "far fa-thumbs-up" %}
+            {% endif %}
+
+            <a href="/like-pitch/{{pitch.id}}"><i class="{{icon_class}}"></i></a>
             {% if user.id == pitch.author %}
+
             <div class="btn-group">
               <button
                 type="button"
